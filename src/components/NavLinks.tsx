@@ -13,8 +13,6 @@ type NotLoggedInProps = {
 };
 
 export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
-  console.log(user);
-
   return (
     <>
       <span className='text-sm px-2'>{user?.name}</span>
