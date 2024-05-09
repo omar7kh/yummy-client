@@ -12,8 +12,6 @@ const MainNav = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
   const { user, logout } = useAuth0();
 
-  console.log(isAuthenticated);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none'>

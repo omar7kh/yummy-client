@@ -19,15 +19,18 @@ export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
       <Separator className='my-1' />
 
       <div className='flex flex-col text-sm'>
-        <Link to='/profile' className='pl-2 py-1 hover:bg-gray-200 rounded-sm'>
+        <Link to='/profile' className='pl-2 py-1 hover:bg-muted rounded-sm'>
           Profile
         </Link>
-        <Link to='/orders' className='pl-2 py-1 hover:bg-gray-200 rounded-sm'>
+        <Link to='/orders' className='pl-2 py-1 hover:bg-muted rounded-sm'>
           Orders
+        </Link>
+        <Link to='/restaurant' className='pl-2 py-1 hover:bg-muted rounded-sm'>
+          Restaurant
         </Link>
         <Button
           variant='ghost'
-          className='pl-2 py-1 hover:bg-gray-200 rounded-sm'
+          className='pl-2 py-1 hover:bg-muted rounded-sm'
           onClick={async () => await logout()}
         >
           Logout

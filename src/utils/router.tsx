@@ -4,6 +4,7 @@ import Layout from '@/layouts/Layout';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import Home from '@/pages/Home';
 import ProfilePage from '@/pages/ProfilePage';
+import RestaurantPage from '@/pages/RestaurantPage';
 import RouterRoot from '@/routerRoot/RouterRoot';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -30,6 +31,17 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <Layout>
               <ProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: '/restaurant',
+        element: (
+          <ProtectedRoute>
+            <Layout>
+              <RestaurantPage />
             </Layout>
           </ProtectedRoute>
         ),
