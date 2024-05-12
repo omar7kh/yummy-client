@@ -5,6 +5,7 @@ import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import Home from '@/pages/Home';
 import ProfilePage from '@/pages/ProfilePage';
 import RestaurantPage from '@/pages/RestaurantPage';
+import SearchPage from '@/pages/SearchPage';
 import RouterRoot from '@/routerRoot/RouterRoot';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -20,9 +21,19 @@ const router = createBrowserRouter([
           </Layout>
         ),
       },
+
       {
         path: '/auth/callback',
         element: <AuthCallbackPage />,
+      },
+
+      {
+        path: '/search/:city',
+        element: (
+          <Layout>
+            <SearchPage />
+          </Layout>
+        ),
       },
 
       {

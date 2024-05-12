@@ -1,118 +1,61 @@
-import { Restaurant } from '@/types';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useMutation, useQuery } from 'react-query';
-import { toast } from 'sonner';
+import { SearchState } from '@/pages/SearchPage';
+import { Restaurant, RestaurantSearchResponse } from '@/types';
+import { useQuery } from 'react-query';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// create Restaurant
-export const useCreateRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  const createRestaurantRequest = async (
-    restaurantFormData: FormData
-  ): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/restaurant`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: restaurantFormData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to create restaurant');
-    }
-
-    return response.json();
-  };
-
-  const {
-    mutate: createRestaurant,
-    isLoading,
-    isSuccess,
-    error,
-  } = useMutation(createRestaurantRequest);
-
-  if (isSuccess) {
-    toast.success('Restaurant created!');
-  }
-
-  if (error) {
-    toast.error('Unable to update restaurant');
-  }
-
-  return { createRestaurant, isLoading };
-};
-
-// Fetch Restaurant
-export const useGetRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  const getRestaurantRequest = async (): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/restaurant`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+export const useGetRestaurant = (restaurantId?: string) => {
+  const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
+    const response = await fetch(`${apiUrl}/api/restaurant/${restaurantId}`);
 
     if (!response.ok) {
       throw new Error('Failed to get restaurant');
     }
+
     return response.json();
   };
 
   const { data: restaurant, isLoading } = useQuery(
     'fetchRestaurant',
-    getRestaurantRequest
+    getRestaurantByIdRequest,
+    {
+      enabled: !!restaurantId,
+    }
   );
 
   return { restaurant, isLoading };
 };
 
-// Update Restaurant
-export const useUpdateRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
+export const useSearchRestaurants = (
+  searchState: SearchState,
+  city?: string
+) => {
+  const createSearchRequest = async (): Promise<RestaurantSearchResponse> => {
+    const params = new URLSearchParams();
+    params.set('searchQuery', searchState.searchQuery);
+    params.set('page', searchState.page.toString());
+    params.set('selectedCuisines', searchState.selectedCuisines.join(','));
+    params.set('sortOption', searchState.sortOption);
 
-  const updateRestaurantRequest = async (
-    restaurantFormData: FormData
-  ): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(
+      `${apiUrl}/api/restaurant/search/${city}?${params.toString()}`
+    );
 
-    const response = await fetch(`${apiUrl}/api/restaurant`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: restaurantFormData,
-    });
-
-    if (!response) {
-      throw new Error('Failed to update restaurant');
+    if (!response.ok) {
+      throw new Error('Failed to get restaurant');
     }
 
     return response.json();
   };
 
-  const {
-    mutate: updateRestaurant,
+  const { data: results, isLoading } = useQuery(
+    ['searchRestaurants', searchState],
+    createSearchRequest,
+    { enabled: !!city }
+  );
+
+  return {
+    results,
     isLoading,
-    error,
-    isSuccess,
-  } = useMutation(updateRestaurantRequest);
-
-  if (isSuccess) {
-    toast.success('Restaurant Updated');
-  }
-
-  if (error) {
-    toast.error('Unable to update restaurant');
-  }
-
-  return { updateRestaurant, isLoading };
+  };
 };

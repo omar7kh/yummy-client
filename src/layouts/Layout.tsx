@@ -9,7 +9,7 @@ const Layout = ({ children }: Props) => {
   return (
     <div className='flex flex-col min-h-screen bg-background'>
       <Header />
-      <main className='container flex-1 py-10 flex flex-col justify-center'>
+      <main className='container flex-1 py-10 flex flex-col justify-center mt-[88px]'>
         {children}
       </main>
       <Footer />
