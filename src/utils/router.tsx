@@ -3,9 +3,11 @@ import PageNotFound from '@/components/PageNotFound';
 import Layout from '@/layouts/Layout';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import Home from '@/pages/Home';
+import MyRestaurantOrdersPage from '@/pages/MyRestaurantOrdersPage';
+import ManageMyRestaurantPage from '@/pages/ManageMyRestaurantPage';
+import OrderStatusPage from '@/pages/OrderStatusPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RestaurantDetailPage from '@/pages/RestaurantDetailPage';
-import RestaurantPage from '@/pages/RestaurantPage';
 import SearchPage from '@/pages/SearchPage';
 import RouterRoot from '@/routerRoot/RouterRoot';
 import { createBrowserRouter } from 'react-router-dom';
@@ -47,13 +49,32 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
       {
-        path: '/restaurant',
+        path: '/my-restaurant',
         element: (
           <ProtectedRoute>
             <Layout>
-              <RestaurantPage />
+              <ManageMyRestaurantPage />
+            </Layout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/my-restaurant-orders',
+        element: (
+          <ProtectedRoute>
+            <Layout>
+              <MyRestaurantOrdersPage />
+            </Layout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/order-status',
+        element: (
+          <ProtectedRoute>
+            <Layout>
+              <OrderStatusPage />
             </Layout>
           </ProtectedRoute>
         ),

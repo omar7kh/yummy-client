@@ -22,11 +22,23 @@ export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
         <Link to='/profile' className='pl-2 py-1 hover:bg-muted rounded-sm'>
           Profile
         </Link>
-        <Link to='/orders' className='pl-2 py-1 hover:bg-muted rounded-sm'>
+        <Link
+          to='/order-status'
+          className='pl-2 py-1 hover:bg-muted rounded-sm'
+        >
           Orders
         </Link>
-        <Link to='/restaurant' className='pl-2 py-1 hover:bg-muted rounded-sm'>
-          Restaurant
+        <Link
+          to='/my-restaurant'
+          className='pl-2 py-1 hover:bg-muted rounded-sm'
+        >
+          My Restaurant
+        </Link>
+        <Link
+          to='/my-restaurant-orders'
+          className='pl-2 py-1 hover:bg-muted rounded-sm'
+        >
+          My Restaurant Orders
         </Link>
         <Button
           variant='ghost'
