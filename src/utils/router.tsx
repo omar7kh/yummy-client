@@ -4,6 +4,7 @@ import Layout from '@/layouts/Layout';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import Home from '@/pages/Home';
 import ProfilePage from '@/pages/ProfilePage';
+import RestaurantDetailPage from '@/pages/RestaurantDetailPage';
 import RestaurantPage from '@/pages/RestaurantPage';
 import SearchPage from '@/pages/SearchPage';
 import RouterRoot from '@/routerRoot/RouterRoot';
@@ -57,7 +58,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
+      {
+        path: `/detail/:restaurantId`,
+        element: (
+          <Layout>
+            <RestaurantDetailPage />
+          </Layout>
+        ),
+      },
       {
         path: '*',
         element: <PageNotFound />,

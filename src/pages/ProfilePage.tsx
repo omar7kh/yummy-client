@@ -18,6 +18,7 @@ const ProfilePage = () => {
       onSave={updateUser}
       isLoading={isUpdateLoading}
       currentUser={currentUser}
+      isBorder={true}
     />
   );
 };
