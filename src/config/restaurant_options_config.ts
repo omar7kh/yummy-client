@@ -13,6 +13,7 @@ export const cuisineList = [
   'Italian',
   'Japanese',
   'Mexican',
+  'Arabic',
   'Noodles',
   'Organic',
   'Pasta',

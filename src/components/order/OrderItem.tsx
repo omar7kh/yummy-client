@@ -8,10 +8,10 @@ import {
 } from '@/components/ui/select';
 import { orderStatus } from '@/config/order-status-config';
 import { useEffect, useState } from 'react';
-import { Badge } from './ui/badge';
-import { Label } from './ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Separator } from './ui/separator';
+import { Badge } from '../ui/badge';
+import { Label } from '../ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Separator } from '../ui/separator';
 import { useUpdateMyRestaurantOrder } from '@/api/MyRestaurantApi';
 
 type Props = {

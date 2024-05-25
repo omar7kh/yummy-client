@@ -5,6 +5,23 @@ import { toast } from 'sonner';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+type CheckoutSessionRequest = {
+  cartItems: {
+    menuItemId: string;
+    name: string;
+    quantity: string;
+  }[];
+  deliveryDetails: {
+    email: string;
+    name: string;
+    address: {
+      street: string;
+      city: string;
+    };
+  };
+  restaurantId: string;
+};
+
 export const useGetMyOrders = () => {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -33,23 +50,6 @@ export const useGetMyOrders = () => {
   );
 
   return { orders, isLoading };
-};
-
-type CheckoutSessionRequest = {
-  cartItems: {
-    menuItemId: string;
-    name: string;
-    quantity: string;
-  }[];
-  deliveryDetails: {
-    email: string;
-    name: string;
-    address: {
-      street: string;
-      city: string;
-    };
-  };
-  restaurantId: string;
 };
 
 export const useCreateCheckoutSession = () => {

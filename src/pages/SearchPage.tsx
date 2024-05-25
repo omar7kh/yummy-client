@@ -1,12 +1,14 @@
 import { useSearchRestaurants } from '@/api/RestaurantApi';
 import CuisineFilter from '@/components/CuisineFilter';
 import PaginationSelector from '@/components/PaginationSelector';
-import SearchBar, { SearchForm } from '@/components/SearchBar';
-import SearchResultCard from '@/components/SearchResultCard';
-import SearchResultInfo from '@/components/SearchResultInfo';
+import SearchBar, { SearchForm } from '@/components/search/SearchBar';
+import SearchResultCard from '@/components/search/SearchResultCard';
+import SearchResultInfo from '@/components/search/SearchResultInfo';
 import SortOptionDropdown from '@/components/SortOptionDropdown';
+import Spinner from '@/components/Spinner';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export type SearchState = {
   searchQuery: string;
@@ -26,6 +28,8 @@ const SearchPage = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const { results, isLoading } = useSearchRestaurants(searchState, city);
+
+  const navigate = useNavigate();
 
   const setSelectedCuisines = (selectedCuisines: string[]) => {
     setSearchState((prevState) => ({
@@ -67,11 +71,16 @@ const SearchPage = () => {
   };
 
   if (isLoading) {
-    return <span>loading...</span>;
+    return <Spinner />;
   }
 
   if (!results?.data || !city) {
-    return <span>No results found</span>;
+    return (
+      <div className='h-[calc(100vh-86px)] flex flex-col justify-center items-center gap-5'>
+        <span>{`There is no Restaurant in ${city} found`}</span>
+        <Button onClick={() => navigate('/')}>Go Home</Button>
+      </div>
+    );
   }
 
   return (
@@ -104,16 +113,16 @@ const SearchPage = () => {
         </div>
 
         {results.data.map((restaurant) => (
-          <>
-            <SearchResultCard restaurant={restaurant} />
-          </>
+          <SearchResultCard restaurant={restaurant} />
         ))}
 
-        <PaginationSelector
-          page={results.pagination.page}
-          pages={results.pagination.pages}
-          onPageChange={setPage}
-        />
+        {results.data.length >= 1 && (
+          <PaginationSelector
+            page={results.pagination.page}
+            pages={results.pagination.pages}
+            onPageChange={setPage}
+          />
+        )}
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ const CarouselHero = () => {
       <CarouselContent>
         {images.map((image: string, index: number) => (
           <CarouselItem key={index}>
-            <div className='p-1'>
+            <div>
               <Card>
                 <CardContent className='w-full max-h-[500px] flex aspect-square items-center justify-center p-0'>
                   <img

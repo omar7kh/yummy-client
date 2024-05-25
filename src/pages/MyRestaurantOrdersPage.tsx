@@ -1,11 +1,12 @@
 import { useGetRestaurantOrders } from '@/api/MyRestaurantApi';
-import OrderItem from '@/components/OrderItem';
+import Spinner from '@/components/Spinner';
+import OrderItem from '@/components/order/OrderItem';
 
 const MyRestaurantOrdersPage = () => {
   const { orders, isLoading } = useGetRestaurantOrders();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (

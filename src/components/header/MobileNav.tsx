@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Separator } from './ui/separator';
+import { Separator } from '../ui/separator';
 import { IsLoggedInLinks, NotLoggedInLinks } from './NavLinks';
 
 const MobileNav = () => {

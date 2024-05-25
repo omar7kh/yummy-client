@@ -1,12 +1,12 @@
-import { CircleUser } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '../ui/dropdown-menu';
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { IsLoggedInLinks, NotLoggedInLinks } from './NavLinks';
+import { Menu } from 'lucide-react';
 
 const MainNav = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
@@ -14,12 +14,13 @@ const MainNav = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className='outline-none'>
-        <CircleUser
+      <DropdownMenuTrigger className='outline-none flex'>
+        <Menu
           className='text-primary md:w-8 md:h-8'
           aria-label='User Profile'
         />
       </DropdownMenuTrigger>
+
       {isAuthenticated ? (
         <>
           <DropdownMenuContent>

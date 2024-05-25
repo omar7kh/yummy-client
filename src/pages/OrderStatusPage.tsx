@@ -1,6 +1,7 @@
 import { useGetMyOrders } from '@/api/OrderApi';
-import OrderStatusDetail from '@/components/OrderStatusDetail';
-import OrderStatusHeader from '@/components/OrderStatusHeader';
+import OrderStatusDetail from '@/components/order/OrderStatusDetail';
+import OrderStatusHeader from '@/components/order/OrderStatusHeader';
+import Spinner from '@/components/Spinner';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
 
@@ -8,7 +9,7 @@ const OrderStatusPage = () => {
   const { orders, isLoading } = useGetMyOrders();
 
   if (isLoading) {
-    return 'Loading...';
+    return <Spinner />;
   }
 
   if (!orders || orders.length === 0) {

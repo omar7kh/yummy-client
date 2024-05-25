@@ -5,7 +5,12 @@ import { toast } from 'sonner';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// create Restaurant
+type UpdateOrderStatusRequest = {
+  orderId: string;
+  status: string;
+};
+
+// Create Restaurant
 export const useCreateRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -147,11 +152,6 @@ export const useGetRestaurantOrders = () => {
 };
 
 // Update my Restaurant Order Status
-type UpdateOrderStatusRequest = {
-  orderId: string;
-  status: string;
-};
-
 export const useUpdateMyRestaurantOrder = () => {
   const { getAccessTokenSilently } = useAuth0();
 

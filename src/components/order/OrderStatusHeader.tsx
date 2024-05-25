@@ -1,5 +1,5 @@
 import { Order } from '@/types';
-import { Progress } from './ui/progress';
+import { Progress } from '../ui/progress';
 import { orderStatus } from '@/config/order-status-config';
 
 type Props = {

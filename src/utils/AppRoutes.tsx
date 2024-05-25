@@ -1,5 +1,4 @@
 import ProtectedRoute from '@/auth/ProtectedRoute';
-import PageNotFound from '@/components/PageNotFound';
 import Layout from '@/layouts/Layout';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import Home from '@/pages/Home';
@@ -11,6 +10,7 @@ import RestaurantDetailPage from '@/pages/RestaurantDetailPage';
 import SearchPage from '@/pages/SearchPage';
 import RouterRoot from '@/routerRoot/RouterRoot';
 import { createBrowserRouter } from 'react-router-dom';
+import PageNotFound from '@/pages/PageNotFound';
 
 const router = createBrowserRouter([
   {

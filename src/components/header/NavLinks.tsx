@@ -1,6 +1,6 @@
-import { Separator } from './ui/separator';
+import { Separator } from '../ui/separator';
 import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { LogoutOptions, User } from '@auth0/auth0-react';
 
 type LoggedInProps = {

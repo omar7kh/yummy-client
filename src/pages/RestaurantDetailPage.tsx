@@ -2,7 +2,7 @@ import { useCreateCheckoutSession } from '@/api/OrderApi';
 import { useGetRestaurantDetails } from '@/api/RestaurantApi';
 import CheckoutButton from '@/components/CheckoutButton';
 import MenuItems from '@/components/MenuItems';
-import OrderSummary from '@/components/OrderSummary';
+import OrderSummary from '@/components/order/OrderSummary';
 import RestaurantInfo from '@/components/RestaurantInfo';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardFooter } from '@/components/ui/card';

@@ -1,5 +1,5 @@
 import CarouselHero from '@/components/Carousel';
-import Search from '@/components/Search';
+import Search from '@/components/search/SearchBarHome';
 
 const Home = () => {
   return (
