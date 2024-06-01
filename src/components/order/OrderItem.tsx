@@ -52,7 +52,7 @@ const OrderItem = ({ order }: Props) => {
           <div>
             Customer Name:
             <span className='ml-2 font-normal'>
-              {order.deliveryDetails.name}
+              {`${order.deliveryDetails.firstName} ${order.deliveryDetails.lastName}`}
             </span>
           </div>
           <div>

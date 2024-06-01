@@ -1,19 +1,17 @@
-import { useAuth0 } from '@auth0/auth0-react';
+import { useCheckAuth } from '@/api/checkAuth';
+import Spinner from '@/components/Spinner';
 import { Navigate } from 'react-router-dom';
 
 interface Props {
   children: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<Props> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth0();
-  if (isLoading) {
-    return <span>loading...</span>;
-  }
+const ProtectedRoute = ({ children }: Props) => {
+  const { isAuth, isLoading } = useCheckAuth();
 
-  if (isAuthenticated) {
-    return children;
-  }
+  if (isLoading) return <Spinner />;
+
+  if (isAuth) return children;
 
   return <Navigate to='/' replace />;
 };

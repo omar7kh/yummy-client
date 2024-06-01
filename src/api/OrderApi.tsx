@@ -1,9 +1,9 @@
 import { Order } from '@/types';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
+import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_BASE_URL;
 
 type CheckoutSessionRequest = {
   cartItems: {
@@ -13,7 +13,8 @@ type CheckoutSessionRequest = {
   }[];
   deliveryDetails: {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     address: {
       street: string;
       city: string;
@@ -23,22 +24,16 @@ type CheckoutSessionRequest = {
 };
 
 export const useGetMyOrders = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const getMyOrdersRequest = async (): Promise<Order[]> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/order`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    const response = await axios.get(`${apiUrl}/api/order`, {
+      withCredentials: true,
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to get orders');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const { data: orders, isLoading } = useQuery(
@@ -53,30 +48,20 @@ export const useGetMyOrders = () => {
 };
 
 export const useCreateCheckoutSession = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const createCheckoutSessionRequest = async (
     checkoutSessionRequest: CheckoutSessionRequest
   ) => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(
+    const response = await axios.post(
       `${apiUrl}/api/order/checkout/create-checkout-session`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(checkoutSessionRequest),
-      }
+      checkoutSessionRequest,
+      { withCredentials: true }
     );
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Unable to create checkout session');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const {

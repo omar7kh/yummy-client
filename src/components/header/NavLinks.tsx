@@ -1,21 +1,28 @@
 import { Separator } from '../ui/separator';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-import { LogoutOptions, User } from '@auth0/auth0-react';
+import { User } from '@/types';
+import { useLogoutUser } from '@/api/UserApi';
 
-type LoggedInProps = {
-  user: User | undefined;
-  logout: (options?: LogoutOptions | undefined) => Promise<void>;
+type MainNavProps = {
+  userInfo: User | null;
 };
+export const IsLoggedInLinks = ({ userInfo }: MainNavProps) => {
+  const { logoutUser, isLoading } = useLogoutUser();
 
-type NotLoggedInProps = {
-  loginWithRedirect: () => Promise<void>;
-};
+  const navigate = useNavigate();
 
-export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
+  const handleLogout = async () => {
+    logoutUser();
+    localStorage.removeItem('UserInfo');
+    navigate('/');
+  };
+
+  if (isLoading) return;
+
   return (
     <>
-      <span className='text-sm px-2'>{user?.name}</span>
+      <div className='text-sm px-2 text-center'>{`${userInfo?.firstName} ${userInfo?.lastName}`}</div>
       <Separator className='my-1' />
 
       <div className='flex flex-col text-sm'>
@@ -43,7 +50,7 @@ export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
         <Button
           variant='ghost'
           className='pl-2 py-1 hover:bg-muted rounded-sm'
-          onClick={async () => await logout()}
+          onClick={handleLogout}
         >
           Logout
         </Button>
@@ -52,22 +59,20 @@ export const IsLoggedInLinks = ({ user, logout }: LoggedInProps) => {
   );
 };
 
-export const NotLoggedInLinks = ({ loginWithRedirect }: NotLoggedInProps) => {
+export const NotLoggedInLinks = () => {
   return (
     <>
-      <Button
-        variant='ghost'
-        className='pl-2 py-1 hover:bg-gray-200 rounded-sm'
-        onClick={async () => await loginWithRedirect()}
-      >
-        Login
-      </Button>
-      <Button
-        variant='ghost'
-        className='pl-2 py-1 hover:bg-gray-200 rounded-sm'
-      >
-        Sign up
-      </Button>
+      <Link to='/login'>
+        <Button variant='ghost' className='w-full'>
+          Login
+        </Button>
+      </Link>
+
+      <Link to='/sign-up'>
+        <Button variant='ghost' className='w-full'>
+          Sign up
+        </Button>
+      </Link>
     </>
   );
 };

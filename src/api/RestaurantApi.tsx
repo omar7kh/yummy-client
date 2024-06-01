@@ -1,18 +1,22 @@
 import { SearchState } from '@/pages/SearchPage';
 import { Restaurant, RestaurantSearchResponse } from '@/types';
+import axios from 'axios';
 import { useQuery } from 'react-query';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_BASE_URL;
 
+// GET RESTAURANTS
 export const useGetRestaurant = (restaurantId?: string) => {
   const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
-    const response = await fetch(`${apiUrl}/api/restaurant/${restaurantId}`);
+    const response = await axios.get(
+      `${apiUrl}/api/restaurant/${restaurantId}`
+    );
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to get restaurant');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const { data: restaurant, isLoading } = useQuery(
@@ -26,6 +30,7 @@ export const useGetRestaurant = (restaurantId?: string) => {
   return { restaurant, isLoading };
 };
 
+// SEARCH RESTAURANT
 export const useSearchRestaurants = (
   searchState: SearchState,
   city?: string
@@ -37,15 +42,15 @@ export const useSearchRestaurants = (
     params.set('selectedCuisines', searchState.selectedCuisines.join(','));
     params.set('sortOption', searchState.sortOption);
 
-    const response = await fetch(
+    const response = await axios.get(
       `${apiUrl}/api/restaurant/search/${city}?${params.toString()}`
     );
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to get restaurant');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const { data: results, isLoading } = useQuery(
@@ -60,17 +65,18 @@ export const useSearchRestaurants = (
   };
 };
 
+// GET RESTAURANT DETAILS
 export const useGetRestaurantDetails = (restaurantId?: string) => {
   const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
-    const response = await fetch(
+    const response = await axios.get(
       `${apiUrl}/api/restaurant/detail/${restaurantId}`
     );
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to get restaurant');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const { data: restaurant, isLoading } = useQuery(

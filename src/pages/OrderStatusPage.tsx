@@ -13,7 +13,11 @@ const OrderStatusPage = () => {
   }
 
   if (!orders || orders.length === 0) {
-    return 'No orders found';
+    return (
+      <div className='flex justify-center items-center'>
+        There is No orders found
+      </div>
+    );
   }
 
   return (

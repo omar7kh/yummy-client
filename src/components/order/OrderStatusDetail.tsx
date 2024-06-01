@@ -5,11 +5,15 @@ type Props = {
 };
 
 const OrderStatusDetail = ({ order }: Props) => {
+  console.log(order.totalAmount);
+
   return (
     <div className='space-y-5'>
       <div className='flex flex-col'>
         <span className='font-bold'>Delivering to:</span>
-        <span>{order.deliveryDetails.name}</span>
+        <span>
+          {`${order.deliveryDetails.firstName}  ${order.deliveryDetails.lastName}`}
+        </span>
         <span>
           {order.deliveryDetails.address.street},{' '}
           {order.deliveryDetails.address.city}

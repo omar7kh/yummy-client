@@ -1,16 +1,16 @@
 import {
-  useCreateRestaurant,
-  useGetRestaurant,
-  useUpdateRestaurant,
+  useCreateMyRestaurant,
+  useGetMyRestaurant,
+  useUpdateMyRestaurant,
 } from '@/api/MyRestaurantApi';
 import RestaurantForm from '@/forms/restaurantForm/RestaurantForm';
 
 const RestaurantPage = () => {
   const { createRestaurant, isLoading: isCreateLoading } =
-    useCreateRestaurant();
-  const { restaurant } = useGetRestaurant();
+    useCreateMyRestaurant();
+  const { restaurant } = useGetMyRestaurant();
   const { updateRestaurant, isLoading: isUpdateLoading } =
-    useUpdateRestaurant();
+    useUpdateMyRestaurant();
 
   const isEditing = !!restaurant;
 

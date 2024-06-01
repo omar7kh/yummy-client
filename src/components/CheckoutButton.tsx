@@ -1,12 +1,12 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import LoadingButton from './LoadingButton';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
-import UserProfileForm, {
+import { useCheckAuth } from '@/api/checkAuth';
+import { useGetCurrentUser } from '@/api/UserApi';
+import UserForm, {
   UserFormData,
 } from '@/forms/userProfileForm/UserProfileForm';
-import { useGetCurrentUser } from '@/api/UserApi';
+import { Link } from 'react-router-dom';
 
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
@@ -15,33 +15,18 @@ type Props = {
 };
 
 const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
-  const {
-    isAuthenticated,
-    isLoading: isAuthLoading,
-    loginWithRedirect,
-  } = useAuth0();
-
-  const { pathname } = useLocation();
-
+  const { isError } = useCheckAuth();
   const { currentUser, isLoading: isGetUserLoading } = useGetCurrentUser();
 
-  const onLogin = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: pathname,
-      },
-    });
-  };
-
-  if (!isAuthenticated) {
+  if (isError) {
     return (
-      <Button onClick={onLogin} variant='primary'>
-        Log in to check out
-      </Button>
+      <Link to='/login'>
+        <Button variant='primary'>Log in to check out</Button>
+      </Link>
     );
   }
 
-  if (isAuthLoading || !currentUser || isLoading) {
+  if (!currentUser || isLoading) {
     return <LoadingButton />;
   }
 
@@ -54,7 +39,7 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
       </DialogTrigger>
 
       <DialogContent className='max-w-[425px] md:min-w-[700px]'>
-        <UserProfileForm
+        <UserForm
           currentUser={currentUser}
           onSave={onCheckout}
           isLoading={isGetUserLoading}

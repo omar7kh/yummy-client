@@ -1,136 +1,177 @@
 import { User } from '@/types';
-import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 type CreateUser = {
-  auth0Id: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  password: string;
 };
 
-type UpdateUserRequest = {
-  name: string;
-  address: {
-    street: string;
-    city: string;
-    country: string;
-  };
+type Login = {
+  email: string;
+  password: string;
 };
 
+// CREATE USER
 export const useCreateUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
+  const createUserRequest = async (userFormData: CreateUser) => {
+    const response = await axios.post(
+      `${API_URL}/api/user/sign-up`,
+      userFormData,
+      { withCredentials: true }
+    );
 
-  const createUserRequest = async (user: CreateUser) => {
-    const accessToken = await getAccessTokenSilently();
+    if (response.status !== 201) {
+      console.log(response.data);
 
-    const response = await fetch(`${apiUrl}/api/user`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to create user');
+      throw new Error('Failed to create User');
     }
+
+    return response.data;
   };
 
   const {
     mutateAsync: createUser,
     isLoading,
-    isError,
     isSuccess,
-  } = useMutation(createUserRequest);
+  } = useMutation(createUserRequest, {
+    onSuccess: () => {
+      toast.success('User created successfully');
+    },
+    onError: () => {
+      toast.error('Failed to create User');
+    },
+  });
 
-  return {
-    createUser,
-    isLoading,
-    isError,
-    isSuccess,
-  };
+  return { createUser, isLoading, isSuccess };
 };
 
-export const useUpdateUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
+// LOGIN USER
+export const useLoginUser = () => {
+  const createLoginRequest = async (userFormData: Login) => {
+    const response = await axios.post(
+      `${API_URL}/api/user/login`,
+      userFormData,
+      { withCredentials: true }
+    );
 
-  const updateUserRequest = async (formData: UpdateUserRequest) => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/user`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update user');
+    if (response.status !== 200) {
+      throw new Error('Failed to Login');
     }
-    return response.json();
+
+    localStorage.setItem('UserInfo', JSON.stringify(response.data));
+
+    return response.data;
   };
 
   const {
-    mutateAsync: updateUser,
+    mutateAsync: LoginUser,
     isLoading,
     isSuccess,
+    isError,
     error,
-    reset,
-  } = useMutation(updateUserRequest);
+  } = useMutation(createLoginRequest, {
+    onSuccess: () => {
+      toast.success('Logged in successfully');
+    },
+    onError: () => {
+      toast.error('Failed to Login');
+    },
+  });
 
-  if (isSuccess) {
-    toast.success('profile updated successfully');
-  }
+  return { LoginUser, isLoading, isSuccess, isError, error };
+};
 
-  if (error) {
-    toast.error(error.toString());
-    reset();
-  }
+// UPDATE USER
+export const useUpdateUser = () => {
+  const updateUserRequest = async (userFormData: User) => {
+    const response = await axios.put(`${API_URL}/api/user`, userFormData, {
+      withCredentials: true,
+    });
 
-  return {
-    updateUser,
-    isLoading,
+    if (response.status !== 200) {
+      throw new Error('Failed to Update User');
+    }
+
+    localStorage.removeItem('UserInfo');
+    localStorage.setItem('UserInfo', JSON.stringify(response.data));
+
+    return response.data;
   };
+
+  const {
+    mutateAsync: updatedUser,
+    isLoading,
+    reset,
+  } = useMutation(updateUserRequest, {
+    onSuccess: () => {
+      toast.success('User updated successfully');
+    },
+    onError: () => {
+      toast.error('Failed to Update User');
+      reset();
+    },
+  });
+
+  return { updatedUser, isLoading };
+};
+
+// LOGOUT USER
+export const useLogoutUser = () => {
+  const logoutUserRequest = async () => {
+    const response = await axios.post(
+      `${API_URL}/api/user/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Failed to Logout');
+    }
+
+    return response.data;
+  };
+
+  const {
+    mutate: logoutUser,
+    isLoading,
+    isSuccess,
+  } = useMutation(logoutUserRequest, {
+    onSuccess: () => {
+      toast.success('Logged out');
+    },
+    onError: () => {
+      toast.error('Failed to Logout');
+    },
+  });
+
+  return { logoutUser, isLoading, isSuccess };
 };
 
 export const useGetCurrentUser = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
-  const getCurrentUserRequest = async (): Promise<User> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/user`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
+  const getCurrentUserRequest = async () => {
+    const response = await axios.get(`${API_URL}/api/user`, {
+      withCredentials: true,
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to get current user');
+    if (response.status !== 200) {
+      throw new Error('Failed to Get Current User');
     }
 
-    return response.json();
+    return response.data;
   };
 
-  const {
-    data: currentUser,
-    isLoading,
-    error,
-  } = useQuery('getCurrentUser', getCurrentUserRequest);
+  const { data: currentUser, isLoading } = useQuery(
+    'currentUser',
+    getCurrentUserRequest
+  );
 
-  if (error) {
-    toast.error(error.toString());
-  }
-
-  return {
-    currentUser,
-    isLoading,
-  };
+  return { currentUser, isLoading };
 };

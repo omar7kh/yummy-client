@@ -4,7 +4,7 @@ import UserProfileForm from '@/forms/userProfileForm/UserProfileForm';
 
 const ProfilePage = () => {
   const { currentUser, isLoading: isGetLoading } = useGetCurrentUser();
-  const { updateUser, isLoading: isUpdateLoading } = useUpdateUser();
+  const { updatedUser, isLoading: isUpdateLoading } = useUpdateUser();
 
   if (isGetLoading) {
     return <Spinner />;
@@ -16,7 +16,7 @@ const ProfilePage = () => {
 
   return (
     <UserProfileForm
-      onSave={updateUser}
+      onSave={updatedUser}
       isLoading={isUpdateLoading}
       currentUser={currentUser}
       isBorder={true}

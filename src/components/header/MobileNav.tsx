@@ -6,14 +6,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Separator } from '../ui/separator';
 import { IsLoggedInLinks, NotLoggedInLinks } from './NavLinks';
+import { User } from '@/types';
 
-const MobileNav = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-  const { user, logout } = useAuth0();
-
+type MainNavProps = {
+  userInfo: User | null;
+};
+const MobileNav = ({ userInfo }: MainNavProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -27,13 +27,13 @@ const MobileNav = () => {
 
         <Separator />
 
-        {isAuthenticated ? (
+        {userInfo ? (
           <div className='space-y-3'>
-            <IsLoggedInLinks user={user} logout={logout} />
+            <IsLoggedInLinks userInfo={userInfo} />
           </div>
         ) : (
           <div className='flex justify-evenly'>
-            <NotLoggedInLinks loginWithRedirect={loginWithRedirect} />
+            <NotLoggedInLinks />
           </div>
         )}
       </SheetContent>

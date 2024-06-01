@@ -1,37 +1,31 @@
 import { Order, Restaurant } from '@/types';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
+import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 type UpdateOrderStatusRequest = {
   orderId: string;
   status: string;
 };
 
-// Create Restaurant
-export const useCreateRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
+// CREATE MY RESTAURANT
+export const useCreateMyRestaurant = () => {
   const createRestaurantRequest = async (
     restaurantFormData: FormData
   ): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
+    const response = await axios.post(
+      `${API_URL}/api/my/restaurant`,
+      restaurantFormData,
+      { withCredentials: true }
+    );
 
-    const response = await fetch(`${apiUrl}/api/my/restaurant`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: restaurantFormData,
-    });
-
-    if (!response.ok) {
+    if (response.status !== 201) {
       throw new Error('Failed to create restaurant');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const {
@@ -52,24 +46,17 @@ export const useCreateRestaurant = () => {
   return { createRestaurant, isLoading };
 };
 
-// Fetch Restaurant
-export const useGetRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
+// GET MY RESTAURANT
+export const useGetMyRestaurant = () => {
   const getRestaurantRequest = async (): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/my/restaurant`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    const response = await axios.get(`${API_URL}/api/my/restaurant`, {
+      withCredentials: true,
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to get restaurant');
     }
-    return response.json();
+    return response.data;
   };
 
   const { data: restaurant, isLoading } = useQuery(
@@ -80,28 +67,22 @@ export const useGetRestaurant = () => {
   return { restaurant, isLoading };
 };
 
-// Update Restaurant
-export const useUpdateRestaurant = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
+// UPDATE MY RESTAURANT
+export const useUpdateMyRestaurant = () => {
   const updateRestaurantRequest = async (
     restaurantFormData: FormData
   ): Promise<Restaurant> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/my/restaurant`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: restaurantFormData,
-    });
+    const response = await axios.put(
+      `${API_URL}/api/my/restaurant`,
+      restaurantFormData,
+      { withCredentials: true }
+    );
 
     if (!response) {
       throw new Error('Failed to update restaurant');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const {
@@ -122,25 +103,18 @@ export const useUpdateRestaurant = () => {
   return { updateRestaurant, isLoading };
 };
 
-// Fetch My Restaurant Orders
-export const useGetRestaurantOrders = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
+// GET MY RESTAURANT ORDERS
+export const useGetMyRestaurantOrders = () => {
   const getMyRestaurantOrdersRequest = async (): Promise<Order[]> => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(`${apiUrl}/api/my/restaurant/order`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    const response = await axios.get(`${API_URL}/api/my/restaurant/order`, {
+      withCredentials: true,
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to fetch orders');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const { data: orders, isLoading } = useQuery(
@@ -151,32 +125,22 @@ export const useGetRestaurantOrders = () => {
   return { orders, isLoading };
 };
 
-// Update my Restaurant Order Status
+// UPDATE MY RESTAURANT ORDERS
 export const useUpdateMyRestaurantOrder = () => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const updateMyRestaurantOrder = async (
     updateStatusOrderRequest: UpdateOrderStatusRequest
   ) => {
-    const accessToken = await getAccessTokenSilently();
-
-    const response = await fetch(
-      `${apiUrl}/api/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
-      {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: updateStatusOrderRequest.status }),
-      }
+    const response = await axios.put(
+      `${API_URL}/api/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
+      { status: updateStatusOrderRequest.status },
+      { withCredentials: true }
     );
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to update status');
     }
 
-    return response.json();
+    return response.data;
   };
 
   const {

@@ -17,8 +17,9 @@ import { User } from '@/types';
 import { useEffect } from 'react';
 
 const formSchema = z.object({
-  email: z.string().optional(),
-  name: z.string().min(4, 'Must be 4 or more characters long'),
+  email: z.string(),
+  firstName: z.string().min(2, 'Must be 2 or more characters long'),
+  lastName: z.string().min(2, 'Must be 2 or more characters long'),
   address: z.object({
     street: z.string().min(4, 'Street is required'),
     city: z.string().min(4, { message: 'City is required' }),
@@ -37,7 +38,7 @@ type Props = {
   isBorder: boolean;
 };
 
-const UserProfileForm = ({
+const UserForm = ({
   onSave,
   isLoading,
   currentUser,
@@ -74,7 +75,7 @@ const UserProfileForm = ({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} className='focus:border-none' disabled />
+                <Input {...field} className='focus:border-none' />
               </FormControl>
             </FormItem>
           )}
@@ -82,10 +83,24 @@ const UserProfileForm = ({
 
         <FormField
           control={form.control}
-          name='name'
+          name='firstName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input {...field} className='focus:border-none' />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='lastName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
               <FormControl>
                 <Input {...field} className='focus:border-none' />
               </FormControl>
@@ -149,4 +164,4 @@ const UserProfileForm = ({
   );
 };
 
-export default UserProfileForm;
+export default UserForm;

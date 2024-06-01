@@ -1,7 +1,8 @@
 export type User = {
-  _id: string;
+  _id?: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   address: {
     street: string;
     city: string;
@@ -46,7 +47,8 @@ export type Order = {
     quantity: string;
   }[];
   deliveryDetails: {
-    name: string;
+    firstName: string;
+    lastName: string;
     address: {
       street: string;
       city: string;

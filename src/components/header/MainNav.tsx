@@ -1,17 +1,18 @@
+import { User } from '@/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 
-import { useAuth0 } from '@auth0/auth0-react';
 import { IsLoggedInLinks, NotLoggedInLinks } from './NavLinks';
 import { Menu } from 'lucide-react';
 
-const MainNav = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-  const { user, logout } = useAuth0();
+type MainNavProps = {
+  userInfo: User | null;
+};
 
+const MainNav = ({ userInfo }: MainNavProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none flex'>
@@ -21,15 +22,15 @@ const MainNav = () => {
         />
       </DropdownMenuTrigger>
 
-      {isAuthenticated ? (
+      {userInfo ? (
         <>
           <DropdownMenuContent>
-            <IsLoggedInLinks user={user} logout={logout} />
+            <IsLoggedInLinks userInfo={userInfo} />
           </DropdownMenuContent>
         </>
       ) : (
         <DropdownMenuContent className='flex flex-col text-sm'>
-          <NotLoggedInLinks loginWithRedirect={loginWithRedirect} />
+          <NotLoggedInLinks />
         </DropdownMenuContent>
       )}
     </DropdownMenu>
