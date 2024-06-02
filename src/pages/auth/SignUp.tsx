@@ -13,8 +13,9 @@ import { Input } from '@/components/ui/input';
 import LoadingButton from '@/components/LoadingButton';
 import { Button } from '@/components/ui/button';
 import { useCreateUser } from '@/api/UserApi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 const signUpSchema = z
   .object({
@@ -37,6 +38,7 @@ const signUpSchema = z
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { createUser, isLoading, isSuccess } = useCreateUser();
 
   const navigate = useNavigate();
@@ -162,11 +164,24 @@ const SignUp = () => {
               <FormItem className='flex-1'>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    className='focus:border-none'
-                    type='password'
-                  />
+                  <div className='relative'>
+                    <Input
+                      {...field}
+                      className='pr-10'
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                    {showPassword ? (
+                      <EyeOff
+                        className='fa-solid fa-eye-slash cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <Eye
+                        onClick={() => setShowPassword(!showPassword)}
+                        className='fa-solid fa-eye cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                      />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -179,11 +194,24 @@ const SignUp = () => {
               <FormItem className='flex-1'>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    className='focus:border-none'
-                    type='password'
-                  />
+                  <div className='relative'>
+                    <Input
+                      {...field}
+                      className='pr-10'
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                    {showPassword ? (
+                      <EyeOff
+                        className='fa-solid fa-eye-slash cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <Eye
+                        onClick={() => setShowPassword(!showPassword)}
+                        className='fa-solid fa-eye cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                      />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

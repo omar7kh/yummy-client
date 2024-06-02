@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useLoginUser } from '@/api/UserApi';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -30,6 +31,7 @@ interface ErrorResponse {
 }
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { LoginUser, isLoading, isSuccess, isError, error } = useLoginUser();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [exceedingLimitTimer, setExceedingLimitTimer] = useState<number>(() => {
@@ -116,16 +118,30 @@ const Login = () => {
           control={form.control}
           name='password'
           render={({ field }) => (
-            <FormItem className='flex-1'>
+            <FormItem className='flex-1 '>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  className='focus:border-none'
-                  type='password'
-                />
+                <div className='relative'>
+                  <Input
+                    {...field}
+                    className='pr-10'
+                    type={showPassword ? 'text' : 'password'}
+                  />
+                  {showPassword ? (
+                    <EyeOff
+                      className='fa-solid fa-eye-slash cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  ) : (
+                    <Eye
+                      onClick={() => setShowPassword(!showPassword)}
+                      className='fa-solid fa-eye cursor-pointer text-primary absolute right-2 top-1/2 transform -translate-y-1/2'
+                    />
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
+
               {errorMessage && (
                 <div className='text-red-500 mt-1 text-sm'>{errorMessage}</div>
               )}
